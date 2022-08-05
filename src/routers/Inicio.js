@@ -1,28 +1,32 @@
-import React from 'react'
-import { useAxios } from '../hooks/useAxios'
+import {useContext} from 'react'
+import { Link } from 'react-router-dom'
+import { userContext } from '../context/UseProvider'
 
 const Inicio = () => {
-  const {data, error, loading} = useAxios(`https://jsonplaceholder.typicode.com/albums`)
+  const {user, signIn, signOut} = useContext(userContext)
+  
 
-  if(loading){
-    return(
-      <h3>Loading....</h3>
-    )
-  }
-  if(error !== ''){
-    return(
-      <h3>{error}</h3>
-    )
-  }
   return (
-    <div className='container row m-auto'>
+    <div className='container'>
+      <h2>
         {
-          data.map(item => (
-            <div  key={item.id} className='card mb-2 col-md-4'>
-              <h3 className='card-body'>{item.id}</h3>
-              <h4 className='card-subtitle'>{item.title}</h4>
-            </div>
-          ))
+          user ? "Conectado" : "Desconectado"
+        }
+      </h2>
+      {
+          user ? (
+            <>
+              <button className='btn btn-primary' 
+                      onClick={signOut}>Desconectar
+              </button>
+              <Link to='/RutaProtegida'
+                    className='btn btn-danger'>Protegida</Link>
+            </>
+          ) : (
+            <button className='btn btn-primary' 
+                    onClick={signIn}>Conectar
+            </button>
+          )
         }
     </div>
   )
